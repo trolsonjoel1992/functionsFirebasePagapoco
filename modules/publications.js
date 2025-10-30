@@ -16,8 +16,8 @@ app.post('/create-publication',  async (req, res) => { //validateFirebaseToken
     try {
          const data = req.body;
          const response = await createPublicationsData(data);
-         return res.status(httpStatusCodes.created).
-         json(getSuccessResponseObject(response, httpStatusCodes.created));
+         return res.status(httpStatusCodes.created)
+         .json(getSuccessResponseObject(response, httpStatusCodes.created));
     } catch (error) {
         const ErrorResponse = getErrorResponseObject(error, 'Algo salió mal');
         return res.status(httpStatusCodes.internalServerError).json(ErrorResponse);
