@@ -26,9 +26,7 @@ app.post('/create-publication',  async (req, res) => { //validateFirebaseToken
 
 app.get('/get-publications-home', async (req, res) => { //validateFirebaseToken
     try {
-        console.log('Getting publications home in module with query params:', req.body);
-        const data = Object.keys(req.body || {}).length ? req.body : req.query;
-        console.log('Data received for getting publications home in module:', data);
+        const data = req.body;
         const response = await getPublicationsHome(data);
         return res.status(httpStatusCodes.ok)
         .json(getSuccessResponseObject(response, httpStatusCodes.ok));
