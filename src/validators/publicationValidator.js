@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const publicationSchema = Joi.object({
-    id: Joi.string().uuid().optional(),
+    id: Joi.string().optional(),
     isSold: Joi.boolean().default(false),
     isPaused: Joi.boolean().default(false),
     isPremium: Joi.boolean().default(false),
@@ -14,6 +14,7 @@ const publicationSchema = Joi.object({
     model: Joi.string().min(2).max(100).required(),
     color: Joi.string().min(2).max(100).required(),
     year: Joi.number().integer().min(1900).max(new Date().getFullYear()).required(),
+    images: Joi.array().items(Joi.string().uri()).min(1).max(8).required(),
     mileage: Joi.number().integer().min(0).optional(),
     version: Joi.string().min(1).max(25).optional(),
     doors: Joi.number().integer().min(1).max(9).optional(),
@@ -25,7 +26,9 @@ const publicationSchema = Joi.object({
     motorcycleWheel: Joi.number().integer().min(10).max(30).optional(),
     pieceCondition: Joi.string().valid('new', 'used').optional(),
     compatibility: Joi.array().items(Joi.string().min(2).max(100)).optional(),
+    
 });
+
 
 const validatePublicationData = (data) => {
   return publicationSchema.validate(data, {
@@ -34,23 +37,37 @@ const validatePublicationData = (data) => {
   });
 };
 
-const paginationSchema = Joi.object({     
-  premiumCount: Joi.number().integer().min(1).max(100).optional(),
-  nonPremiumCount: Joi.number().integer().min(1).max(100).optional(),
-  lastPremiumKey: Joi.string().allow('').optional(),
-  lastNonPremiumKey: Joi.string().allow('').optional()
+
+const paginationSchema = Joi.object({
+    premiumCount: Joi.number().integer().min(0).optional(),
+    nonPremiumCount: Joi.number().integer().min(0).optional(),
+    lastPremiumKey: Joi.string().optional(),
+    lastNonPremiumKey: Joi.string().optional(),
 });
 
-function validatePaginationParams(data) {
+const validatePagination = (data) => {
   return paginationSchema.validate(data, {
     abortEarly: true,
     stripUnknown: true,
   });
+};
+
+const publicationIdSchema = Joi.object({
+    id: Joi.string().required(),
+})
+
+const validatePublicationId = (data) => {
+  return publicationIdSchema.validate(data, {
+    abortEarly: true,
+    stripUnknown: true,
+  })
 }
 
 module.exports = {
   publicationSchema,
   paginationSchema,
+  publicationIdSchema,
   validatePublicationData,
-  validatePaginationParams
+  validatePagination,
+  validatePublicationId
 };

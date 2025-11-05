@@ -1,0 +1,34 @@
+cliente => middleware A => middleware B => Controller => middleware C => resposta ao cliente
+req res next
+
+RBAC role-based access control
+ABAC attribute-based access control
+PBAC policy-based access control
+validacion y sanitizacion de datos de entrada
+zero trust security model
+https tls la utenticidad del servidor y la integridad de los datos no estan garantizadas si el cliente no valida el certificado del servidor
+
+access control allow origin
+access control allow methods
+access control allow headers
+
+csp
+content security policy
+x frame-transport-security
+x content-type-options
+logging y auditorias 
+
+app.use((req, res, next) => {
+    console.log('Nueva petición HTTP:', req.method, req.path);
+    next();
+});
+
+const checkAuth = (req, res, next) => {
+const token = req.headers.authorization?.split(' ')[1];
+if (!token) {
+    return res.status(httpStatusCodes.unauthorized).json(
+        getErrorResponseObject(null, 'No se proporcionó token')
+    );
+}
+next();
+};
